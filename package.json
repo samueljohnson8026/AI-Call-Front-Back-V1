@@ -16,7 +16,10 @@
     "install:all": "npm install && npm run frontend:install",
     "dev:backend": "node server.js",
     "dev:frontend": "cd frontend && npm run dev",
-    "build:all": "npm run frontend:build"
+    "build:all": "npm run frontend:build",
+    "test:deployment": "node test-deployment.js",
+    "deploy": "./deploy.sh",
+    "deploy:prod": "./production-deploy.sh"
   },
   "engines": {
     "node": ">=18.0.0"
