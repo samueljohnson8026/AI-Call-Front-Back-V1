@@ -28,5 +28,8 @@
     "author": {
         "name": "Sebastian Morales Lorca",
         "email": "seba.morales.lorca@gmail.com"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0"
     }
 }

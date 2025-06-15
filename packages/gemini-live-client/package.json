@@ -31,5 +31,8 @@
     },
     "dependencies": {
         "ws": "^8.18.2"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0"
     }
 }
