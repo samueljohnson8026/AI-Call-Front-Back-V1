@@ -1,4 +1,4 @@
-import { Tw2GemServer } from './packages/tw2gem-server/dist/index.js';
+import { Tw2GemServer } from '@tw2gem/server';
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
@@ -60,23 +60,6 @@ server.onNewCall = (socket) => {
 
 server.geminiLive.onReady = (socket) => {
     console.log('🤖 Gemini Live connection ready for call:', socket.twilioStreamSid);
-    
-    // Send initial greeting to ensure AI speaks first
-    setTimeout(() => {
-        if (socket.geminiLive && socket.geminiLive.readyState === 1) {
-            const initialMessage = {
-                client_content: {
-                    turns: [{
-                        role: 'user',
-                        parts: [{ text: 'Please greet the caller now. Say hello and ask how you can help them today.' }]
-                    }],
-                    turn_complete: true
-                }
-            };
-            socket.geminiLive.send(JSON.stringify(initialMessage));
-            console.log('👋 Sent initial greeting prompt to Gemini for call:', socket.twilioStreamSid);
-        }
-    }, 500);
 };
 
 server.geminiLive.onClose = (socket) => {
