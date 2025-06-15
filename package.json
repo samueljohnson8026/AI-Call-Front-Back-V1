@@ -1,14 +1,22 @@
 {
-  "name": "ai-calling-backend",
+  "name": "ai-calling-full-stack",
   "version": "1.0.0",
-  "description": "AI Calling System Backend - Twilio to Gemini Live Integration",
+  "description": "AI Calling System - Full Stack with Backend and Frontend",
   "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
     "build": "echo 'No build step required'",
-    "health": "curl http://localhost:$PORT/health || curl http://localhost:3001/health"
+    "health": "curl http://localhost:$PORT/health || curl http://localhost:3001/health",
+    "frontend:install": "cd frontend && npm install",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "frontend:preview": "cd frontend && npm run preview",
+    "install:all": "npm install && npm run frontend:install",
+    "dev:backend": "node server.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:all": "npm run frontend:build"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -30,6 +38,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/ai-calling-backend.git"
+    "url": "https://github.com/diamondgray669/AI-Call-Front-Back.git"
   }
 }

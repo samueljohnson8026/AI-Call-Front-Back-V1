@@ -1,154 +1,301 @@
-# AI Calling Backend
+# AI Calling System - Full Stack
 
-A clean, production-ready backend server that connects Twilio phone calls to Google's Gemini Live AI for real-time voice conversations.
+A complete AI-powered calling system with Twilio ↔ Gemini Live integration. This repository contains both the backend server and frontend dashboard in a single, organized structure.
 
-## 🚀 Quick Deploy to Render
+## 🏗 Repository Structure
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
-
-## 📋 Features
-
-- **Real-time Voice AI**: Connects Twilio calls directly to Gemini Live
-- **WebSocket Support**: Handles Twilio Media Streams
-- **Health Monitoring**: Built-in health check endpoints
-- **Environment-based Configuration**: Easy deployment configuration
-- **Production Ready**: Optimized for cloud deployment
-
-## 🛠 Environment Variables
-
-Create a `.env` file or set these in your deployment platform:
-
-```env
-# Required
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Optional (with defaults)
-VOICE_NAME=Puck
-LANGUAGE_CODE=en-US
-PORT=3000
-NODE_ENV=production
+```
+ai-calling-system/
+├── 📁 frontend/           # React Dashboard (Vercel-ready)
+│   ├── src/              # React components and pages
+│   ├── package.json      # Frontend dependencies
+│   ├── vercel.json       # Vercel deployment config
+│   └── README.md         # Frontend-specific docs
+├── 📁 packages/          # TW2GEM Core Packages
+│   ├── tw2gem-server/    # Main Twilio ↔ Gemini server
+│   ├── gemini-live-client/ # Gemini Live API client
+│   ├── twilio-server/    # Twilio WebSocket handler
+│   └── audio-converter/  # Audio format conversion
+├── server.js             # Backend entry point
+├── package.json          # Backend dependencies
+├── render.yaml           # Render deployment config
+└── README.md             # This file
 ```
 
-## 🚀 Deployment
+## 🚀 Quick Start
 
-### Deploy to Render
-
-1. **Fork this repository** to your GitHub account
-
-2. **Connect to Render**:
-   - Go to [Render Dashboard](https://dashboard.render.com)
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-
-3. **Configure the service**:
-   - **Name**: `ai-calling-backend`
-   - **Environment**: `Node`
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-
-4. **Set Environment Variables**:
-   - Add your `GEMINI_API_KEY`
-   - Set other optional variables as needed
-
-5. **Deploy**: Click "Create Web Service"
-
-### Manual Deployment
+### Option 1: Full Local Development
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd ai-calling-backend
+git clone https://github.com/diamondgray669/AI-Call-Front-Back.git
+cd AI-Call-Front-Back
+
+# Install backend dependencies
+npm install
+
+# Install frontend dependencies
+cd frontend
+npm install
+cd ..
+
+# Set up environment variables
+cp .env.example .env
+cp frontend/.env.example frontend/.env
+# Edit both .env files with your actual values
+
+# Start backend (Terminal 1)
+npm start
+
+# Start frontend (Terminal 2)
+cd frontend
+npm run dev
+```
+
+### Option 2: Separate Deployment (Recommended for Production)
+
+Deploy backend and frontend to different platforms for optimal performance:
+
+#### Backend → Render
+```bash
+# Backend will be deployed from root directory
+# Render will run: npm install && npm start
+```
+
+#### Frontend → Vercel
+```bash
+# Frontend will be deployed from /frontend directory
+# Vercel will auto-detect Vite configuration
+```
+
+## 🔧 Environment Variables
+
+### Backend (.env)
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+NODE_ENV=production
+PORT=3000
+```
+
+### Frontend (frontend/.env)
+```env
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+VITE_API_URL=https://your-backend-url.onrender.com
+VITE_APP_NAME=AI Call Center
+```
+
+## 🚀 Deployment Options
+
+### Option A: Separate Deployment (Recommended)
+
+**Backend to Render:**
+1. Connect this repository to Render
+2. Set build command: `npm install`
+3. Set start command: `npm start`
+4. Set environment variables
+5. Deploy
+
+**Frontend to Vercel:**
+1. Connect this repository to Vercel
+2. Set root directory to `frontend`
+3. Vercel auto-detects Vite configuration
+4. Set environment variables
+5. Deploy
+
+### Option B: Full Stack on Single Platform
+
+**Deploy to Render (Full Stack):**
+1. Modify `package.json` to build frontend
+2. Serve frontend from Express server
+3. Single deployment with both services
+
+## 📊 Features
+
+### Backend Features
+- **Twilio Integration**: WebSocket handling for phone calls
+- **Gemini Live API**: Real-time AI conversation
+- **Audio Processing**: Format conversion and streaming
+- **Health Monitoring**: Status endpoints and logging
+- **CORS Configuration**: Secure cross-origin requests
+
+### Frontend Features
+- **Real-time Dashboard**: Live call monitoring
+- **User Authentication**: Supabase Auth integration
+- **Call Analytics**: Comprehensive reporting
+- **Settings Management**: API key configuration
+- **Responsive Design**: Mobile-friendly interface
+
+## 🔒 Security
+
+- **Environment Variables**: Secure API key storage
+- **CORS Protection**: Configured for production
+- **Supabase RLS**: Row-level security policies
+- **Input Validation**: Sanitized user inputs
+- **Encrypted Storage**: Secure API key encryption
+
+## 🛠 Development
+
+### Backend Development
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev  # or npm start
+
+# Backend runs on http://localhost:3000
+```
+
+### Frontend Development
+```bash
+# Navigate to frontend
+cd frontend
 
 # Install dependencies
 npm install
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your actual values
+# Start development server
+npm run dev
 
-# Start the server
-npm start
+# Frontend runs on http://localhost:5173
 ```
 
-## 📞 Twilio Configuration
+### Full Stack Development
+```bash
+# Terminal 1: Backend
+npm start
 
-After deployment, configure your Twilio phone number:
+# Terminal 2: Frontend
+cd frontend && npm run dev
 
-1. **Get your webhook URL**: `wss://your-app-name.onrender.com`
-2. **Configure Twilio Phone Number**:
-   - Go to Twilio Console → Phone Numbers
-   - Select your phone number
-   - Set Webhook URL to: `wss://your-app-name.onrender.com`
-   - Set HTTP method to: `POST`
-   - Save configuration
+# Backend: http://localhost:3000
+# Frontend: http://localhost:5173
+```
 
-## 🔍 Health Checks
+## 📋 Available Scripts
 
-The server provides several endpoints for monitoring:
+### Root (Backend)
+- `npm start` - Start production server
+- `npm run dev` - Start development server
+- `npm install` - Install backend dependencies
 
-- **Health Check**: `GET /health`
-- **Status**: `GET /status`
-- **Root**: `GET /`
+### Frontend
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
 
-## 🎯 API Endpoints
+## 🔧 Configuration
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/` | GET | Service information |
-| `/health` | GET | Health check status |
-| `/status` | GET | Detailed service status |
-| `/` | WebSocket | Twilio Media Stream endpoint |
+### Supabase Setup
+1. Create project at [Supabase](https://supabase.com)
+2. Run SQL schema from `frontend/README.md`
+3. Configure authentication settings
+4. Get project URL and anon key
 
-## 🔧 Configuration Options
+### Twilio Setup
+1. Get Twilio account and phone number
+2. Configure webhook URL to your backend
+3. Set webhook method to POST
+4. Test phone number configuration
 
-### Voice Options
-- `Puck` (Default) - Friendly and professional
-- `Charon` - Deep and authoritative
-- `Kore` - Warm and empathetic
-- `Fenrir` - Strong and confident
-- `Aoede` - Melodic and soothing
-- `Leda` - Clear and articulate
-- `Orus` - Calm and reassuring
-- `Zephyr` - Light and energetic
+### Gemini API Setup
+1. Get API key from Google AI Studio
+2. Add to backend environment variables
+3. Configure model settings if needed
 
-### Language Options
-- `en-US` (Default) - English (US)
-- `en-GB` - English (UK)
-- `es-US` - Spanish (US)
-- `es-ES` - Spanish (Spain)
-- `fr-FR` - French
-- `de-DE` - German
-- `it-IT` - Italian
-- `pt-BR` - Portuguese (Brazil)
+## 🎯 Deployment Strategies
 
-## 🐛 Troubleshooting
+### Strategy 1: Microservices (Recommended)
+- **Backend**: Render (Node.js optimized)
+- **Frontend**: Vercel (React/Vite optimized)
+- **Database**: Supabase (managed PostgreSQL)
+- **Benefits**: Optimal performance, independent scaling
+
+### Strategy 2: Monolith
+- **Full Stack**: Single platform (Render/Railway)
+- **Database**: Supabase
+- **Benefits**: Simpler deployment, single domain
+
+### Strategy 3: Hybrid
+- **Backend**: Self-hosted/VPS
+- **Frontend**: Vercel/Netlify
+- **Database**: Supabase
+- **Benefits**: Cost control, flexibility
+
+## 🔍 Monitoring
+
+### Backend Monitoring
+- Health check: `GET /health`
+- Status endpoint: `GET /status`
+- Server logs and error tracking
+
+### Frontend Monitoring
+- Browser console for client errors
+- Network tab for API issues
+- Vercel analytics and logs
+
+## 🆘 Troubleshooting
 
 ### Common Issues
 
-1. **"Missing required environment variables"**
-   - Ensure `GEMINI_API_KEY` is set in your environment
+1. **CORS Errors**
+   - Check backend CORS configuration
+   - Verify frontend API URL
+   - Ensure both services are running
 
-2. **WebSocket connection fails**
-   - Check that your Render service is using the correct webhook URL
-   - Ensure the URL starts with `wss://` not `https://`
+2. **Authentication Issues**
+   - Check Supabase configuration
+   - Verify environment variables
+   - Review RLS policies
 
-3. **Health check fails**
-   - The health endpoint runs on `PORT + 1` (e.g., if main port is 3000, health is on 3001)
-   - Render automatically handles port mapping
+3. **Twilio Connection Issues**
+   - Verify webhook URL
+   - Check WebSocket connection
+   - Ensure backend is accessible
 
-### Logs
+4. **Build Failures**
+   - Check Node.js version compatibility
+   - Verify all dependencies are installed
+   - Review environment variables
 
-Check your Render service logs for detailed error information:
-- Go to Render Dashboard → Your Service → Logs
+### Debug Mode
 
-## 📝 License
+Enable debug logging:
 
-MIT License - see LICENSE file for details
+**Backend:**
+```env
+NODE_ENV=development
+DEBUG=true
+```
 
-## 🤝 Support
+**Frontend:**
+```env
+VITE_DEBUG=true
+```
 
-For issues and questions:
-1. Check the troubleshooting section above
-2. Review Render deployment logs
-3. Verify Twilio webhook configuration
-4. Ensure Gemini API key is valid and has sufficient quota
+## 🔗 Related Repositories
+
+- **Backend Only**: [AI-Call-Backend](https://github.com/diamondgray669/AI-Call-Backend)
+- **Frontend Only**: [AI-Call-Frontend](https://github.com/diamondgray669/AI-Call-Frontend)
+- **Combined**: [AI-Call-Front-Back](https://github.com/diamondgray669/AI-Call-Front-Back) (this repo)
+
+## 🎉 Quick Deploy Buttons
+
+### Deploy Backend to Render
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/diamondgray669/AI-Call-Front-Back)
+
+### Deploy Frontend to Vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/diamondgray669/AI-Call-Front-Back&project-name=ai-call-frontend&root-directory=frontend)
+
+---
+
+## 🎯 Next Steps
+
+1. **Set up Supabase** - Create database and configure authentication
+2. **Deploy Backend** - Use Render or your preferred Node.js platform
+3. **Deploy Frontend** - Use Vercel or your preferred static hosting
+4. **Configure Twilio** - Set webhook URL to your deployed backend
+5. **Test System** - Make a test call to verify everything works
+
+Your AI calling system will be ready for production use! 🚀
