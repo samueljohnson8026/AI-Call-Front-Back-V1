@@ -8,7 +8,7 @@
     "start": "node server.js",
     "dev": "node server.js",
     "build": "echo 'No build step required'",
-    "health": "curl http://localhost:$PORT/health || curl http://localhost:3001/health",
+    "health": "curl http://localhost:$PORT/health || curl http://localhost:3000/health",
     "frontend:install": "cd frontend && npm install",
     "frontend:dev": "cd frontend && npm run dev",
     "frontend:build": "cd frontend && npm run build",
@@ -25,10 +25,6 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@tw2gem/audio-converter": "file:packages/audio-converter",
-    "@tw2gem/gemini-live-client": "file:packages/gemini-live-client",
-    "@tw2gem/server": "file:packages/tw2gem-server",
-    "@tw2gem/twilio-server": "file:packages/twilio-server",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1"
