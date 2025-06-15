@@ -1,0 +1,35 @@
+{
+  "name": "ai-calling-backend",
+  "version": "1.0.0",
+  "description": "AI Calling System Backend - Twilio to Gemini Live Integration",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'No build step required'",
+    "health": "curl http://localhost:$PORT/health || curl http://localhost:3001/health"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "cors": "^2.8.5"
+  },
+  "keywords": [
+    "ai",
+    "calling",
+    "twilio",
+    "gemini",
+    "voice",
+    "assistant"
+  ],
+  "author": "AI Calling System",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/ai-calling-backend.git"
+  }
+}

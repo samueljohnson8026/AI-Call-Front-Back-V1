@@ -1,0 +1,35 @@
+{
+    "name": "@tw2gem/gemini-live-client",
+    "version": "1.0.1",
+    "main": "dist/index.js",
+    "files": [
+        "dist/**/*"
+    ],
+    "scripts": {
+        "build": "tsc -p tsconfig.json"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "license": "MIT",
+    "description": "TypeScript client for real-time communication with Gemini Live, designed to send audio input and receive AI responses using Google's LLM.",
+    "keywords": [
+        "gemini",
+        "gemini-live",
+        "llm",
+        "ai",
+        "google",
+        "language-model",
+        "real-time",
+        "streaming",
+        "audio",
+        "typescript"
+    ],
+    "author": {
+        "name": "Sebastian Morales Lorca",
+        "email": "seba.morales.lorca@gmail.com"
+    },
+    "dependencies": {
+        "ws": "^8.18.2"
+    }
+}

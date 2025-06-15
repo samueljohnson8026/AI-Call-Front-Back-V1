@@ -1,0 +1,25 @@
+{
+    "name": "@tw2gem/examples",
+    "version": "1.0.1",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "twilio-server": "ts-node src/twilio-server",
+        "tw2gem-server": "ts-node src/tw2gem-server",
+        "build": "tsc -p tsconfig.json"
+    },
+    "author": {
+        "name": "Sebastian Morales Lorca",
+        "email": "seba.morales.lorca@gmail.com"
+    },
+    "dependencies": {
+        "@tw2gem/twilio-server": "1.0.1",
+        "@tw2gem/server": "1.0.1"
+    },
+    "devDependencies": {
+        "ts-node": "^10.9.2",
+        "typescript": "^5.0.0"
+    }
+}
