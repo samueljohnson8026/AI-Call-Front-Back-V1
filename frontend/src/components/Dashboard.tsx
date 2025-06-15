@@ -13,9 +13,6 @@ import {
   XCircleIcon,
   MegaphoneIcon
 } from '@heroicons/react/24/outline';
-import { usePermissions } from '../contexts/UserContext';
-import UsageTracker from './UsageTracker';
-import OutboundCampaigns from './OutboundCampaigns';
 
 interface DashboardProps {
   onLogout: () => void
@@ -24,7 +21,6 @@ interface DashboardProps {
 export default function Dashboard({ onLogout }: DashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [serverStatus, setServerStatus] = useState<'running' | 'stopped'>('stopped');
-  const { canUseInbound, canUseOutboundDialer } = usePermissions();
 
   const stats = [
     { name: 'Active Calls', value: '12', icon: PhoneIcon, color: 'text-green-500' },
@@ -82,26 +78,61 @@ export default function Dashboard({ onLogout }: DashboardProps) {
         {/* Navigation Tabs */}
         <div className="border-b border-slate-200 mb-8">
           <nav className="-mb-px flex space-x-8">
-            {[
-              { id: 'overview', name: 'Overview', icon: ChartBarIcon, show: true },
-              { id: 'calls', name: 'Live Calls', icon: PhoneIcon, show: canUseInbound },
-              { id: 'outbound', name: 'Outbound Campaigns', icon: MegaphoneIcon, show: canUseOutboundDialer },
-              { id: 'recordings', name: 'Recordings', icon: MicrophoneIcon, show: true },
-              { id: 'settings', name: 'Settings', icon: Cog6ToothIcon, show: true },
-            ].filter(tab => tab.show).map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
-                } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
-              >
-                <tab.icon className="h-5 w-5" />
-                <span>{tab.name}</span>
-              </button>
-            ))}
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`${
+                activeTab === 'overview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+              } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
+            >
+              <ChartBarIcon className="h-5 w-5" />
+              <span>Overview</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('calls')}
+              className={`${
+                activeTab === 'calls'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+              } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
+            >
+              <PhoneIcon className="h-5 w-5" />
+              <span>Live Calls</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('outbound')}
+              className={`${
+                activeTab === 'outbound'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+              } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
+            >
+              <MegaphoneIcon className="h-5 w-5" />
+              <span>Outbound Campaigns</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('recordings')}
+              className={`${
+                activeTab === 'recordings'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+              } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
+            >
+              <MicrophoneIcon className="h-5 w-5" />
+              <span>Recordings</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`${
+                activeTab === 'settings'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+              } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
+            >
+              <Cog6ToothIcon className="h-5 w-5" />
+              <span>Settings</span>
+            </button>
           </nav>
         </div>
 
@@ -154,9 +185,6 @@ export default function Dashboard({ onLogout }: DashboardProps) {
                 </div>
               ))}
             </div>
-
-            {/* Usage Tracker */}
-            <UsageTracker />
 
             {/* Recent Calls */}
             <div className="bg-white rounded-xl shadow-sm border border-slate-200">
@@ -252,7 +280,12 @@ export default function Dashboard({ onLogout }: DashboardProps) {
         )}
 
         {/* Outbound Campaigns Tab */}
-        {activeTab === 'outbound' && <OutboundCampaigns />}
+        {activeTab === 'outbound' && (
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Outbound Campaigns</h3>
+            <p className="text-slate-500 text-center py-8">No active campaigns</p>
+          </div>
+        )}
 
         {/* Recordings Tab */}
         {activeTab === 'recordings' && (

@@ -1,239 +1,128 @@
 import { useState } from 'react';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { supabase } from '../lib/supabase';
-import { mockAuth } from '../lib/mockAuth';
-import toast from 'react-hot-toast';
+import { PhoneIcon, MicrophoneIcon } from '@heroicons/react/24/outline';
 
-export default function LoginForm() {
+interface LoginFormProps {
+  onLogin: () => void
+}
+
+export default function LoginForm({ onLogin }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      if (isSignUp) {
-        // Try Supabase first, fallback to mock
-        try {
-          const { error } = await supabase.auth.signUp({
-            email,
-            password,
-          });
-          if (error) throw error;
-          toast.success('Check your email for the confirmation link!');
-        } catch (supabaseError) {
-          const { error } = await mockAuth.signUp({ email, password });
-          if (error) throw error;
-          toast.success('Account created! (Demo mode)');
-        }
-      } else {
-        // Try Supabase first, fallback to mock
-        try {
-          const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
-          if (error) throw error;
-          toast.success('Welcome back!');
-        } catch (supabaseError) {
-          const { data, error } = await mockAuth.signInWithPassword({ email, password });
-          if (error) throw error;
-          if (data.user) {
-            toast.success('Welcome back! (Demo mode)');
-            // Trigger a page reload to update auth state
-            window.location.reload();
-          }
-        }
-      }
-    } catch (error: any) {
-      toast.error(error.message || 'Authentication failed');
-    } finally {
-      setLoading(false);
+  const handleLogin = () => {
+    if (email === 'demo@callcenter.ai' && password === 'demo123') {
+      setLoading(true);
+      setTimeout(() => {
+        onLogin();
+        setLoading(false);
+      }, 1000);
+    } else {
+      alert('Invalid credentials. Use demo@callcenter.ai / demo123');
     }
   };
 
-  const handleForgotPassword = async () => {
-    if (!email) {
-      toast.error('Please enter your email address first');
-      return;
-    }
-
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email);
-      if (error) throw error;
-      toast.success('Password reset email sent!');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to send reset email');
-    }
-  };
-
-  const handleDemoLogin = async () => {
-    setLoading(true);
-    try {
-      // Try Supabase first, fallback to mock
-      try {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: 'demo@example.com',
-          password: 'demo123',
-        });
-        if (error) throw error;
-        toast.success('Demo login successful!');
-      } catch (supabaseError) {
-        const { data, error } = await mockAuth.signInWithPassword({
-          email: 'demo@example.com',
-          password: 'demo123',
-        });
-        if (error) throw error;
-        if (data.user) {
-          toast.success('Demo login successful! (Demo mode)');
-          // Trigger a page reload to update auth state
-          window.location.reload();
-        }
-      }
-    } catch (error: any) {
-      toast.error(error.message || 'Demo login failed');
-    } finally {
-      setLoading(false);
-    }
+  const handleDemoLogin = () => {
+    setEmail('demo@callcenter.ai');
+    setPassword('demo123');
+    setTimeout(() => handleLogin(), 100);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center mb-6">
-            <span className="text-2xl font-bold text-white">AI</span>
+          <div className="mx-auto h-20 w-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-2xl">
+            <div className="flex space-x-1">
+              <PhoneIcon className="h-6 w-6 text-white" />
+              <MicrophoneIcon className="h-6 w-6 text-white" />
+            </div>
           </div>
-          <h2 className="text-3xl font-bold text-white">
-            AI Call Center Platform
-          </h2>
-          <p className="mt-2 text-sm text-gray-300">
-            {isSignUp ? 'Create your account' : 'Sign in to your account'}
+          <h1 className="text-4xl font-bold text-white mb-2">
+            AI CALL CENTER
+          </h1>
+          <p className="text-xl text-blue-200 mb-2">
+            Intelligent Calling Platform
+          </p>
+          <p className="text-sm text-slate-300">
+            Advanced AI-Powered Communications
           </p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-gray-800 rounded-lg shadow-xl p-8 border border-gray-700">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Email Field */}
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
+          <div className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
-                Email address
+              <label className="block text-sm font-medium text-white mb-2">
+                Email Address
               </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-400 text-white bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                  placeholder="Enter your email"
-                />
-              </div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
+                placeholder="Enter your email"
+              />
             </div>
 
-            {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+              <label className="block text-sm font-medium text-white mb-2">
                 Password
               </label>
-              <div className="mt-1 relative">
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-600 placeholder-gray-400 text-white bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                  placeholder="Enter your password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-300" />
-                  ) : (
-                    <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-300" />
-                  )}
-                </button>
-              </div>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
+                placeholder="Enter your password"
+              />
             </div>
 
-            {/* Submit Button */}
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-              >
-                {loading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    {isSignUp ? 'Creating account...' : 'Signing in...'}
-                  </div>
-                ) : (
-                  isSignUp ? 'Create Account' : 'Sign In'
-                )}
-              </button>
-            </div>
+            <button
+              onClick={handleLogin}
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
+            >
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Signing in...
+                </div>
+              ) : (
+                'Sign In'
+              )}
+            </button>
 
-            {/* Forgot Password Link */}
-            {!isSignUp && (
-              <div className="text-center">
-                <button
-                  type="button"
-                  onClick={handleForgotPassword}
-                  className="text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200"
-                >
-                  Forgot your password?
-                </button>
-              </div>
-            )}
-
-            {/* Toggle Sign Up / Sign In */}
-            <div className="text-center">
+            <div className="border-t border-white/20 pt-6">
               <button
-                type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="text-sm text-gray-300 hover:text-white transition-colors duration-200"
-              >
-                {isSignUp ? 'Already have an account? Sign in' : 'Don\'t have an account? Sign up'}
-              </button>
-            </div>
-
-            {/* Demo Login */}
-            <div className="border-t border-gray-600 pt-6">
-              <button
-                type="button"
                 onClick={handleDemoLogin}
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-md text-gray-300 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                className="w-full bg-white/10 text-white py-3 px-4 rounded-lg font-medium hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 border border-white/20"
               >
                 Try Demo Account
               </button>
-              <p className="mt-2 text-xs text-gray-400 text-center">
-                Email: demo@example.com • Password: demo123
+              <p className="mt-3 text-xs text-slate-300 text-center">
+                Email: demo@callcenter.ai • Password: demo123
               </p>
             </div>
-          </form>
+          </div>
         </div>
 
-        {/* Footer */}
-        <div className="text-center">
-          <p className="text-xs text-gray-400">
-            Powered by Gemini Live API • Secure Authentication
+        {/* Features */}
+        <div className="text-center space-y-4">
+          <div className="grid grid-cols-2 gap-4 text-xs text-slate-300">
+            <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+              <PhoneIcon className="h-5 w-5 text-blue-400 mx-auto mb-1" />
+              <div>Real-time Calls</div>
+            </div>
+            <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+              <MicrophoneIcon className="h-5 w-5 text-purple-400 mx-auto mb-1" />
+              <div>AI Conversations</div>
+            </div>
+          </div>
+          <p className="text-xs text-slate-400">
+            Enterprise-Grade AI Communications
           </p>
         </div>
       </div>
